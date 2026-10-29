@@ -1,4 +1,4 @@
-import {CONFIG} from './config.js?v=20261029o'
+import {CONFIG} from './config.js?v=20261029r'
 const $=id=>document.getElementById(id),V=$('view');
 const f=(n,d=2)=>n==null||isNaN(n)?'—':(+n).toLocaleString('en-US',{maximumFractionDigits:d});
 const usd=n=>n==null?'—':'$'+(Math.abs(n)>=1e6?f(n/1e6)+'M':Math.abs(n)>=1e3?f(n/1e3)+'K':f(n));
@@ -90,6 +90,7 @@ async function treasuryStats(){const [bal,vb,sigs]=await Promise.all([rpcq('getB
  for(const x of cs){const t=await rpcq('getTransaction',[x.signature,{maxSupportedTransactionVersion:0,encoding:'jsonParsed'}]);if(!t||!t.meta)continue;const keys=t.transaction.message.accountKeys.map(k=>k.pubkey||k);const i=keys.indexOf(FVAULT);const pre=(t.meta.preTokenBalances||[]).find(b=>b.accountIndex===i),post=(t.meta.postTokenBalances||[]).find(b=>b.accountIndex===i);if(pre&&post){const d=(+pre.uiTokenAmount.amount)-(+post.uiTokenAmount.amount);if(d>0&&keys.includes(TREAS))claimed+=d/1e9}}
  return {bal:bal?bal.value/1e9:null,unclaimed:vb?+vb.value.uiAmountString:null,claimed:sigs?claimed:null}}
 P.analytics=async()=>{V.className='wide';
+ if(CONFIG.ANALYTICS_LIVE===false){V.innerHTML=`<div class="page-h"><h1>Analytics</h1><p>Where HoldPad's fees go.</p></div><div class="sec" style="text-align:center;padding:48px 20px"><span class="mono lbl">ANALYTICS PAUSED</span><h3 style="margin:12px 0 6px">Live data will return soon</h3><p>On-chain fee, treasury and holder stats are temporarily offline.</p></div>`;return}
  V.innerHTML=`<div class="page-h"><h1>Analytics</h1><p>Where HoldPad's fees go. Counts come from the LaunchLab platform account on Solana; payout totals come from the keeper's published snapshot.</p></div><div id="ac" class="emptyrow">Loading…</div>`;
  const [d,ps]=await Promise.all([data(),pools()]);const t=d&&d.totals;const pre=!t;const sub=(s)=>pre?live:s;
  const grad=ps?ps.filter(x=>x.status).length:null,stocks=ps?new Set(ps.map(x=>x.mintB).filter(m=>m!==CONFIG.PAIRS[0].m)).size:null;

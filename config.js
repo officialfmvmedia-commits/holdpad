@@ -231,6 +231,7 @@ RPC_GPA:['https://api.mainnet-beta.solana.com'],
 SIM_PAYER:'5tzFkiKscXHK5ZXCGbXZxdw7gTjjD1mBwuoFbhUvuAi9', // any funded pubkey, used only to simulate when no wallet is connected
 weight:(t,d)=>Math.max(0,t)*Math.max(0,d),
 LAUNCHLAB:'LanMV9sAd7wArD4vJFi2qDdfnVhFxYSUg6eADduJ3uj',
+ANALYTICS_LIVE:false, // set true to re-enable live Analytics data
 PLATFORM_ADMIN:'BzLLvPcULF9TZxT2ZqfLmWtq9eoYYrKAUHSWMkHWNkNQ',
 PLATFORM_EXPECTED:'Gzc5SwNSysRNvuemMK1JZynGdsumyxzQ8GHHZ2CVuCW6', // PDA from admin; becomes PLATFORM_ID once created
 WALLETS:{fee:'BzLLvPcULF9TZxT2ZqfLmWtq9eoYYrKAUHSWMkHWNkNQ',buyHold:'BzLLvPcULF9TZxT2ZqfLmWtq9eoYYrKAUHSWMkHWNkNQ'}, // set once decided; empty = shown as 'not set'
