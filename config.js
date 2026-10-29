@@ -225,7 +225,7 @@ PAIRS:[{"s": "SOL", "n": "Wrapped SOL", "m": "So11111111111111111111111111111111
 {"s": "FLY", "n": "Firefly Aerospace - Backpack Securities", "m": "FLYRq3en8r2Z69gN3KyAnDrvnitEJNkwPYY7favinHeD", "config": "79ieaXEoa5DFxdvgzYk7ieZLY9zRuigDg9XKCxfscF2x", "raise": 760, "t": "stock", "i": "FLY.webp"},
 {"s": "RIVN", "n": "Rivian Automotive - Backpack Securities", "m": "RcZmt84VMJv9bDhKqmw1uWDahYrUT468VwAChTnfD8p", "config": "ASnUEJfSezy15M3AM97Ft1V2kZYSdQbF6s2MSAnDeuPh", "raise": 1200, "t": "stock", "i": "RIVN.webp"}],
 LAUNCH:{supply:'1000000000000000',totalSellA:'793100000000000',slippageBps:100},
-PLATFORM_ID:'', // set after the HoldPad LaunchLab platform is created (tools/create-platform.mjs). Empty = Raydium default platform, and Launches list stays empty.
+PLATFORM_ID:'Gzc5SwNSysRNvuemMK1JZynGdsumyxzQ8GHHZ2CVuCW6', // set after the HoldPad LaunchLab platform is created (tools/create-platform.mjs). Empty = Raydium default platform, and Launches list stays empty.
 IPFS_ENDPOINT:'', // URL of worker/ipfs-worker.js once deployed (holds the Pinata key server-side).
 RPC_GPA:['https://api.mainnet-beta.solana.com'],
 SIM_PAYER:'5tzFkiKscXHK5ZXCGbXZxdw7gTjjD1mBwuoFbhUvuAi9', // any funded pubkey, used only to simulate when no wallet is connected
