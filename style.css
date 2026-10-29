@@ -114,3 +114,5 @@ footer{padding-bottom:110px}.page-h h1{font-size:30px}.sc b{font-size:22px}table
 .pk-none{grid-column:1/-1;color:var(--mut);font-size:12px;padding:16px;text-align:center}
 @media(max-width:600px){.pk-list{grid-template-columns:1fr}}
 @media(max-width:600px){.pk-tabs{flex-wrap:nowrap;overflow-x:auto;width:100%}.pk-tabs button{flex:none}}
+.split{grid-template-columns:1fr 1fr}.split b{font-size:26px}
+@media(min-width:601px){.cards:has(>:nth-child(3):last-child){grid-template-columns:repeat(3,1fr)}}

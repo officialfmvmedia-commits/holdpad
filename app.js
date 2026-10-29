@@ -1,11 +1,11 @@
-import {CONFIG} from './config.js?v=20261029d'
+import {CONFIG} from './config.js?v=20261029e'
 const $=id=>document.getElementById(id),V=$('view');
 const f=(n,d=2)=>n==null||isNaN(n)?'—':(+n).toLocaleString('en-US',{maximumFractionDigits:d});
 const usd=n=>n==null?'—':'$'+(Math.abs(n)>=1e6?f(n/1e6)+'M':Math.abs(n)>=1e3?f(n/1e3)+'K':f(n));
 const short=a=>a?a.slice(0,4)+'…'+a.slice(-4):'—';
 const sym=m=>(CONFIG.PAIRS.find(p=>p.m===m)||{s:short(m)}).s;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-let L=null;const lib=async()=>L||(L=await import('./launch.bundle.js?v=20261029d'));
+let L=null;const lib=async()=>L||(L=await import('./launch.bundle.js?v=20261029e'));
 // ---------- data (cached) ----------
 let DATA,POOLS;
 async function data(){if(DATA!==undefined)return DATA;try{const r=await fetch(CONFIG.DATA_URL,{cache:'no-store'});DATA=r.ok?await r.json():null}catch{DATA=null}return DATA}
@@ -27,7 +27,7 @@ const mini=(l,v)=>`<div class="sc mini"><span>${l}</span><b>${v}</b></div>`;
 function nextAt(d){if(d&&d.nextPayoutAt)return new Date(d.nextPayoutAt);const n=new Date(),t=new Date(n);t.setUTCHours(CONFIG.SCHEDULE.payoutUtcHour,0,0,0);while(t<=n)t.setTime(t.getTime()+CONFIG.SCHEDULE.snapshotEveryHours*36e5);return t}
 let cdT;function countdown(el,t){clearInterval(cdT);const tick=()=>{let s=Math.max(0,(t-Date.now())/1e3|0);el.textContent=`${s/86400|0}d ${(s%86400)/3600|0}h ${(s%3600)/60|0}m ${s%60}s`};tick();cdT=setInterval(tick,1000)}
 const PC={SOL:['#9945FF','#14F195'],USDC:['#3b8cff','#1a3f8f'],USDT:['#2fd3a0','#0b6b52'],SPCXx:['#2b2f3a','#9aa4b8'],TSLAx:['#ff3b3b','#7a0d12'],NVDAx:['#9be33a','#2f6b00'],AAPLx:['#e9e9ee','#7c7c86'],GOOGLx:['#4f8cff','#1aa260'],METAx:['#3d7bff','#7a3dff'],AMZNx:['#ffb43a','#b35a00'],MSTRx:['#ff8a1f','#a12a00'],COINx:['#2f6bff','#0b2aa8'],HOODx:['#c6ff3a','#3f8f00'],CRCLx:['#46d4ff','#5a3dff'],SPYx:['#e8e2c8','#8a7a4a'],QQQx:['#33e0c0','#0a5f7a']};
-const icon=p=>p&&p.i?'img/pairs/'+p.i+'?v=20261029d':'';const TL={crypto:'Crypto',xstock:'xStock',stock:'Stock'};const mono=s=>s.replace(/x$/,'').replace(/\..*/,'').slice(0,5);
+const icon=p=>p&&p.i?'img/pairs/'+p.i+'?v=20261029e':'';const TL={crypto:'Crypto',xstock:'xStock',stock:'Stock'};const mono=s=>s.replace(/x$/,'').replace(/\..*/,'').slice(0,5);
 const coinImg=p=>{const b=mono(p.s);return icon(p)?`<img src="${icon(p)}" alt="" width="96" height="96" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'mg',textContent:'${b}'}))">`:`<span class="mg" style="font-size:${b.length>4?14:b.length>3?16:b.length>2?19:24}px">${b}</span>`};
 function pairGrid(){const N=13,sh=CONFIG.PAIRS.slice(0,N),more=CONFIG.PAIRS.length-N;return `<div class="pg"><p class="pg-h mono">${CONFIG.PAIRS.length} PAIRS · HOLDERS PAID IN THE PAIR</p><div class="pg-g">${sh.map((p,i)=>{const c=PC[p.s]||['#3a3a34','#121210'];
 return `<a class="tk" href="#/launch/${encodeURIComponent(p.s)}" title="Launch paired to ${p.n}" style="--a:${c[0]};--b:${c[1]};--d:${(i%7)*.35}s"><span class="coin"><span class="face">${coinImg(p)}</span></span><b class="mono">${p.s}</b><i>${p.s==='SOL'?'Native':TL[p.t]}</i></a>`}).join('')}<a class="tk more" href="#/launch" style="--a:#E8FF3A;--b:#6b7a00;--d:1.2s"><span class="coin"><span class="face"><span class="mg" style="color:#000;text-shadow:none;font-size:17px">+${more}</span></span></span><b class="mono">More</b><i>All pairs</i></a></div></div>`}
@@ -38,7 +38,7 @@ P['']=()=>{V.className='';V.innerHTML=`<header class="hero"><p class="eyebrow mo
 <div class="ctas"><a class="pri" href="#/launch">Launch a coin</a><a href="#/docs">Read the docs</a></div></header>
 <section><ol class="steps"><li><b>Pick a pair.</b> SOL, stables, majors, memes or a tokenized stock like TSLAx.</li><li><b>Hold.</b> Weight = tokens × days held. Any sell resets your days to 0.</li><li><b>Get paid.</b> Holder fees are paid in the pair token. Stock pair, you're paid in stock.</li></ol>
 ${pairGrid()}
-<div class="split">${CONFIG.SPLIT.map(s=>`<div><b>${s.p}%</b><span>${s.k}</span></div>`).join('')}</div></section>`;wireCopy()};
+<div class="split"><div><b>${CONFIG.SPLIT.holders}%</b><span>Holders</span></div><div><b>${CONFIG.SPLIT.buyHold}%</b><span>Buys $HOLD</span></div></div></section>`;wireCopy()};
 P.launch=(arg)=>{V.className='';V.innerHTML=`<div class="page-h" style="text-align:center"><h1>Launch a coin</h1><p style="margin:8px auto 0">Built in your browser, signed by your wallet. We never see a key.</p></div>
 <section class="card launch"><form onsubmit="return false" autocomplete="off">
 <div class="row"><label>Name<input id="fname" maxlength="32" placeholder="Coin name"></label><label class="sm">Ticker<input id="fsym" maxlength="10" placeholder="TICKER"></label></div>
@@ -87,13 +87,12 @@ P.analytics=async()=>{V.className='wide';
  V.innerHTML=`<div class="page-h"><h1>Analytics</h1><p>Where HoldPad's fees go. Counts come from the LaunchLab platform account on Solana; payout totals come from the keeper's published snapshot.</p></div><div id="ac" class="emptyrow">Loading…</div>`;
  const [d,ps]=await Promise.all([data(),pools()]);const t=d&&d.totals;const pre=!t;const sub=(s)=>pre?live:s;
  const grad=ps?ps.filter(x=>x.status).length:null,stocks=ps?new Set(ps.map(x=>x.mintB).filter(m=>m!==CONFIG.PAIRS[0].m)).size:null;
- const bb=t&&t.buyback;let sup=null;if(bb){try{sup=await (await lib()).supply(CONFIG,CONFIG.MINT)}catch{}}
+ const bb=t&&t.buyHold;let sup=null;if(bb){try{sup=await (await lib()).supply(CONFIG,CONFIG.MINT)}catch{}}
  $('ac').outerHTML=`<div class="cards">
  ${card('PAID TO HOLDERS',t?usd(t.paidToHolders.usd):'—',sub(`${usd(t?.paidToHolders.pendingUsd)} more waiting for the next payout`))}
- ${card('EARNED BY CREATORS',t?usd(t.creators.usd):'—',sub('Paid to each coin’s creator'))}
- ${card('$HOLD BOUGHT BACK',t?usd(bb.usd):'—',sub(`${f(bb?.holdBought,0)} $HOLD · ${f(bb?.holdBurned,0)} burned${sup?' · '+f((bb.holdBought/sup)*100,2)+'% of supply':''}`))}
- ${card('TREASURY',t?usd(t.treasury.usd):'—',sub('Ops, RPC, audits'))}</div>
- <div class="cards" style="margin-top:10px">${mini('Total fees collected',t?usd(t.feesCollected.usd):'—')}${mini('Coins launched',ps?f(ps.length,0):'0')}${mini('Graduated to Raydium',grad==null?'0':grad)}${mini('Stocks in use',stocks==null?'0':stocks)}</div>
+ ${card('$HOLD BOUGHT',t?usd(bb.usd):'—',sub(`${f(bb?.holdBought,0)} $HOLD${sup?' · '+f((bb.holdBought/sup)*100,2)+'% of supply':''}`))}
+ ${card('COINS LAUNCHED',ps?f(ps.length,0):'0',`${grad==null?0:grad} graduated to Raydium`)}</div>
+ <div class="cards" style="margin-top:10px">${mini('Total fees collected',t?usd(t.feesCollected.usd):'—')}${mini('Stocks in use',stocks==null?'0':stocks)}</div>
  ${pre?`<p class="note" style="text-align:left;margin-top:10px">ALL FIGURES GO LIVE AFTER $HOLD LAUNCHES. NOTHING ON THIS PAGE IS ESTIMATED OR SAMPLE DATA.</p>`:''}
  <div class="sec"><h3>TOP HOLDERS BY HOLD WEIGHT</h3><p>Next payout: <span class="cd" id="cdn"></span> · ${esc(nextAt(d).toLocaleString())}. Weight = tokens × days held without selling, across every HoldPad coin. Any sell resets that coin's days to 0.</p>
  <div class="lookup"><input id="lk" placeholder="Paste a wallet address to see its rank"><button id="lkb" type="button">Look up</button></div><p class="mono status" id="lkr"></p>
@@ -119,10 +118,10 @@ P.docs=()=>{V.className='wide';const plat=CONFIG.PLATFORM_ID||'';const w=CONFIG.
  <h2 id="d-pairs">Pairs</h2><p>A coin trades against its pair token, so fees accrue in it and holders are paid in it. Pair a stock, you're paid in stock. Only pairs with a Raydium LaunchLab config are offered:</p>
  <div class="tbl"><table class="t"><thead><tr><th>Pair</th><th>Type</th><th>Mint</th><th>Graduates at</th></tr></thead><tbody>${CONFIG.PAIRS.map(p=>`<tr><td>${p.s}</td><td>${p.s==='SOL'?'Native':TL[p.t]}</td><td style="text-align:left"><code>${p.m}</code></td><td>${f(p.raise)} ${p.s}</td></tr>`).join('')}</tbody></table></div>
  <h2 id="d-weight">Hold weight</h2><ul><li>Weight = tokens held × days held without selling.</li><li>Balances are snapshotted every ${CONFIG.SCHEDULE.snapshotEveryHours}h from Solana RPC.</li><li>Any drop in balance between snapshots resets that coin's days to 0. Buying more never resets.</li><li>Pool vaults, the platform and LP accounts are excluded.</li></ul>
- <h2 id="d-fees">Fee split</h2><div class="tbl"><table class="t"><tbody>${CONFIG.SPLIT.map(s=>`<tr><td>${s.k}</td><td style="text-align:left;color:var(--mut)">${s.d}</td><td>${s.p}%</td></tr>`).join('')}</tbody></table></div><p style="margin-top:10px">Proposed. Final numbers are posted here before launches open.</p>
+ <h2 id="d-fees">Fee split</h2><p>Fees from every coin launched on HoldPad:</p><div class="tbl"><table class="t"><tbody><tr><td>Holders</td><td style="text-align:left;color:var(--mut)">By hold weight, paid in the pair token</td><td>${CONFIG.SPLIT.holders}%</td></tr><tr><td>Buys $HOLD</td><td style="text-align:left;color:var(--mut)">Market buys of $HOLD</td><td>${CONFIG.SPLIT.buyHold}%</td></tr></tbody></table></div>
  <h2 id="d-payouts">Payouts</h2><p>The keeper claims platform fees, snapshots holders, and pays out daily at ${String(CONFIG.SCHEDULE.payoutUtcHour).padStart(2,'0')}:00 UTC. Every payout is an on-chain transfer and the totals are published to <code>${CONFIG.DATA_URL}</code>.</p>
- <h2 id="d-contracts">Contracts</h2><div class="kv"><span>$HOLD mint</span><code>${CONFIG.MINT}</code><span>Raydium LaunchLab</span><code>${CONFIG.LAUNCHLAB}</code><span>Platform account</span><code>${plat||CONFIG.PLATFORM_EXPECTED+' (not created yet)'}</code><span>Dev wallet</span><code>${CONFIG.DEV}</code><span>Fee wallet</span><code>${w.fee||'not set'}</code><span>Buyback wallet</span><code>${w.buyback||'not set'}</code><span>Treasury</span><code>${w.treasury||'not set'}</code></div>
- <h2 id="d-faq">FAQ</h2><details><summary>What resets my clock?</summary><p>Any drop in your balance between snapshots.</p></details><details><summary>Who holds the keys?</summary><p>You do. Launches are signed by your own wallet.</p></details><details><summary>What does $HOLD get?</summary><p>30% of fees from every launch buy back $HOLD.</p></details><details><summary>Are the numbers real?</summary><p>Yes. Counts are read from chain, payouts from the keeper's published snapshot. Before launch they show zero.</p></details>
+ <h2 id="d-contracts">Contracts</h2><div class="kv"><span>$HOLD mint</span><code>${CONFIG.MINT}</code><span>Raydium LaunchLab</span><code>${CONFIG.LAUNCHLAB}</code><span>Platform account</span><code>${plat||CONFIG.PLATFORM_EXPECTED+' (not created yet)'}</code><span>Dev wallet</span><code>${CONFIG.DEV}</code><span>Fee wallet</span><code>${w.fee||'not set'}</code><span>$HOLD buy wallet</span><code>${w.buyHold||'not set'}</code></div>
+ <h2 id="d-faq">FAQ</h2><details><summary>What resets my clock?</summary><p>Any drop in your balance between snapshots.</p></details><details><summary>Who holds the keys?</summary><p>You do. Launches are signed by your own wallet.</p></details><details><summary>Where do fees go?</summary><p>${CONFIG.SPLIT.holders}% to holders by hold weight, ${CONFIG.SPLIT.buyHold}% buys $HOLD.</p></details><details><summary>Are the numbers real?</summary><p>Yes. Counts are read from chain, payouts from the keeper's published snapshot. Before launch they show zero.</p></details>
  </article></div>`;V.querySelectorAll('[data-j]').forEach(a=>a.onclick=()=>$('d-'+a.dataset.j).scrollIntoView({behavior:'smooth'}))};
 function route(){clearInterval(cdT);const [p,arg]=(location.hash.replace(/^#\/?/,'')).split('/');const k=P[p]?p:'';
  document.querySelectorAll('#nav a,#tabbar a').forEach(a=>a.classList.toggle('on',(a.getAttribute('href').replace('#/',''))===k));

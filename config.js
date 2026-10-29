@@ -1,6 +1,6 @@
 export const CONFIG={MINT:'9M4Ukvsh2LGjbxWsgmFBnykynuJpTUvP7sAAobbrFF6K',DEV:'HurAwDG4KCLb8Y38JWcXUcU6ZvHYoND7XntiomyvZAfv',
 RPC:['https://solana-rpc.publicnode.com','https://api.mainnet-beta.solana.com'],
-SPLIT:[{k:'Holders',d:'by hold time',p:50,c:'#E8FF3A'},{k:'Buy $HOLD',d:'buyback',p:30,c:'#EDEBE4'},{k:'Creator',d:'coin dev',p:10,c:'#8A877E'},{k:'Treasury',d:'ops',p:10,c:'#3a3a34'}],
+SPLIT:{holders:90,buyHold:10}, // % of fees from coins launched on HoldPad
 // Quote tokens. Every mint verified on-chain (Token-2022, metadata symbol matches) on 2026-10-29.
 // Quote tokens. Each mint verified on-chain AND each has a Raydium LaunchLab global config; a create tx simulated PASS for every one (2026-10-29).
 // raise = bonding-curve graduation target in quote units (~$15k for stocks at Oct-29 prices; 85 SOL for SOL). Decision pending.
@@ -232,7 +232,7 @@ weight:(t,d)=>Math.max(0,t)*Math.max(0,d),
 LAUNCHLAB:'LanMV9sAd7wArD4vJFi2qDdfnVhFxYSUg6eADduJ3uj',
 PLATFORM_ADMIN:'HurAwDG4KCLb8Y38JWcXUcU6ZvHYoND7XntiomyvZAfv',
 PLATFORM_EXPECTED:'5Rp57pG59yQSbR2ZxQA9bVcH1Tr7QMk98aC9KDCsTWLN', // PDA from admin; becomes PLATFORM_ID once created
-WALLETS:{fee:'',buyback:'',treasury:''}, // set once decided; empty = shown as 'not set'
+WALLETS:{fee:'',buyHold:''}, // set once decided; empty = shown as 'not set'
 DATA_URL:'data/analytics.json', // written by keeper/keeper.mjs
 SCHEDULE:{snapshotEveryHours:24,payoutUtcHour:16}, // decision pending
 };
