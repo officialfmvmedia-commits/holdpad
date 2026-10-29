@@ -77,3 +77,17 @@ table.t tbody tr.click{cursor:pointer}table.t tbody tr.click:hover{background:#1
 .tabbar a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9.5px;color:var(--mut);padding:6px 9px;border-radius:12px;min-width:58px}.tabbar a.on{color:var(--acc);background:#1a1a17}.tabbar svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 footer{padding-bottom:110px}.page-h h1{font-size:30px}.sc b{font-size:22px}table.t th:nth-child(4),table.t td:nth-child(4),table.t th:nth-child(5),table.t td:nth-child(5){display:none}.kv{grid-template-columns:1fr}}
 .lookup button{white-space:nowrap;padding:8px 16px}
+
+.pg{margin:34px 0 34px}.pg-h{color:var(--mut);font-size:10.5px;letter-spacing:.16em;margin-bottom:18px}
+.pg-g{display:grid;grid-template-columns:repeat(7,1fr);gap:22px 10px}
+.tk{display:flex;flex-direction:column;align-items:center;gap:7px;perspective:400px}
+.coin{position:relative;width:64px;height:64px;border-radius:50%;background:linear-gradient(160deg,var(--a),var(--b));box-shadow:inset 0 3px 2px rgba(255,255,255,.45),inset 0 -5px 6px rgba(0,0,0,.45),0 6px 0 color-mix(in srgb,var(--b) 70%,#000),0 14px 18px rgba(0,0,0,.6);transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s;animation:fl 4.5s ease-in-out var(--d) infinite}
+.coin::after{content:'';position:absolute;inset:6px 14px auto;height:20px;border-radius:50%;background:linear-gradient(rgba(255,255,255,.4),transparent);pointer-events:none}
+.face{position:absolute;inset:7px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,color-mix(in srgb,var(--a) 85%,#fff),var(--b) 80%);box-shadow:inset 0 -2px 3px rgba(255,255,255,.25),inset 0 3px 5px rgba(0,0,0,.45)}
+.mg{font:800 20px 'Inter Tight';letter-spacing:-.04em;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.35),0 0 1px rgba(0,0,0,.5)}
+.tk b{font-size:11.5px;font-weight:600}.tk i{font:normal 9.5px 'JetBrains Mono';letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin-top:-6px}
+.tk:hover .coin{transform:translateY(-6px) rotateX(14deg) rotateY(-10deg) scale(1.06);box-shadow:inset 0 3px 2px rgba(255,255,255,.5),inset 0 -5px 6px rgba(0,0,0,.45),0 6px 0 color-mix(in srgb,var(--b) 70%,#000),0 20px 28px rgba(0,0,0,.6),0 0 28px color-mix(in srgb,var(--a) 55%,transparent);animation-play-state:paused}
+.tk:hover b{color:var(--acc)}
+@keyframes fl{50%{transform:translateY(-4px)}}
+@media(max-width:600px){.pg-g{display:flex;flex-wrap:wrap;justify-content:center;gap:20px 0}.tk{width:25%}.coin{width:58px;height:58px}}
+@media(prefers-reduced-motion:reduce){.coin{animation:none;transition:none}}

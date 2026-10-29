@@ -26,14 +26,19 @@ const card=(l,v,sub)=>`<div class="sc"><span class="mono lbl">${l}</span><b>${v}
 const mini=(l,v)=>`<div class="sc mini"><span>${l}</span><b>${v}</b></div>`;
 function nextAt(d){if(d&&d.nextPayoutAt)return new Date(d.nextPayoutAt);const n=new Date(),t=new Date(n);t.setUTCHours(CONFIG.SCHEDULE.payoutUtcHour,0,0,0);while(t<=n)t.setTime(t.getTime()+CONFIG.SCHEDULE.snapshotEveryHours*36e5);return t}
 let cdT;function countdown(el,t){clearInterval(cdT);const tick=()=>{let s=Math.max(0,(t-Date.now())/1e3|0);el.textContent=`${s/86400|0}d ${(s%86400)/3600|0}h ${(s%3600)/60|0}m ${s%60}s`};tick();cdT=setInterval(tick,1000)}
+const PC={SOL:['#9945FF','#14F195'],SPCXx:['#2b2f3a','#9aa4b8'],TSLAx:['#ff3b3b','#7a0d12'],NVDAx:['#9be33a','#2f6b00'],AAPLx:['#e9e9ee','#7c7c86'],GOOGLx:['#4f8cff','#1aa260'],METAx:['#3d7bff','#7a3dff'],AMZNx:['#ffb43a','#b35a00'],MSTRx:['#ff8a1f','#a12a00'],COINx:['#2f6bff','#0b2aa8'],HOODx:['#c6ff3a','#3f8f00'],CRCLx:['#46d4ff','#5a3dff'],SPYx:['#e8e2c8','#8a7a4a'],QQQx:['#33e0c0','#0a5f7a']};
+function pairGrid(){return `<div class="pg"><p class="pg-h mono">${CONFIG.PAIRS.length} PAIRS · HOLDERS PAID IN THE PAIR</p><div class="pg-g">${CONFIG.PAIRS.map((p,i)=>{const c=PC[p.s]||['#E8FF3A','#6b7a00'],b=p.s.replace(/x$/,''),nat=p.s==='SOL';
+const g=nat?`<svg viewBox="0 0 40 32" width="46%"><defs><linearGradient id="sg" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#e9fff6"/></linearGradient></defs>${[3,13,23].map((y,k)=>`<path d="M${k==1?2:8} ${y}h30l${k==1?6:-6} 6H${k==1?8:2}z" fill="url(#sg)"/>`).join('')}</svg>`:`<span class="mg" style="font-size:${b.length>4?14:b.length>3?16:b.length>2?19:24}px">${b}</span>`;
+return `<a class="tk" href="#/launch/${p.s}" title="Launch paired to ${p.n}" style="--a:${c[0]};--b:${c[1]};--d:${(i%7)*.35}s"><span class="coin"><span class="face">${g}</span></span><b class="mono">${p.s}</b><i>${nat?'Native':'Stock'}</i></a>`}).join('')}</div></div>`}
 // ---------- pages ----------
 const P={};
 P['']=()=>{V.className='';V.innerHTML=`<header class="hero"><p class="eyebrow mono">RAYDIUM LAUNCHLAB · SOLANA</p><h1>Paper hands pay<br>the diamond hands.</h1>
 <p class="lede">Launch a coin paired to SOL or a tokenized stock. Fees go to holders by how long they've held. Sell and your clock resets.</p>${caPill()}
 <div class="ctas"><a class="pri" href="#/launch">Launch a coin</a><a href="#/docs">Read the docs</a></div></header>
 <section><ol class="steps"><li><b>Pick a pair.</b> SOL or a tokenized stock like TSLAx or SPCXx.</li><li><b>Hold.</b> Weight = tokens × days held. Any sell resets your days to 0.</li><li><b>Get paid.</b> Holder fees are paid in the pair token. Stock pair, you're paid in stock.</li></ol>
+${pairGrid()}
 <div class="split">${CONFIG.SPLIT.map(s=>`<div><b>${s.p}%</b><span>${s.k}</span></div>`).join('')}</div></section>`;wireCopy()};
-P.launch=()=>{V.className='';V.innerHTML=`<div class="page-h" style="text-align:center"><h1>Launch a coin</h1><p style="margin:8px auto 0">Built in your browser, signed by your wallet. We never see a key.</p></div>
+P.launch=(arg)=>{V.className='';V.innerHTML=`<div class="page-h" style="text-align:center"><h1>Launch a coin</h1><p style="margin:8px auto 0">Built in your browser, signed by your wallet. We never see a key.</p></div>
 <section class="card launch"><form onsubmit="return false" autocomplete="off">
 <div class="row"><label>Name<input id="fname" maxlength="32" placeholder="Coin name"></label><label class="sm">Ticker<input id="fsym" maxlength="10" placeholder="TICKER"></label></div>
 <label>Image<input id="fimg" type="file" accept="image/png,image/jpeg,image/gif,image/webp" class="file"></label>
@@ -44,6 +49,7 @@ P.launch=()=>{V.className='';V.innerHTML=`<div class="page-h" style="text-align:
 <div class="acts"><button class="go2" id="bsim" type="button">Simulate</button><button class="go" id="blaunch" type="button">Launch</button></div><p class="mono status" id="lstat"></p></form></section>`;
  let PI=0;$('pairs').innerHTML=CONFIG.PAIRS.map((p,i)=>`<button type="button" class="${i?'':'on'}" data-i="${i}" title="${p.n} · ${p.m}">${p.s}</button>`).join('');
  const hint=i=>{PI=i;$('pairhint').textContent='· holders paid in '+CONFIG.PAIRS[i].s;$('buyunit').textContent=CONFIG.PAIRS[i].s};hint(0);
+ {const j=CONFIG.PAIRS.findIndex(p=>p.s.toLowerCase()===String(arg||'').toLowerCase());if(j>0)$('pairs').children[j].click()}
  $('pairs').onclick=e=>{const b=e.target.closest('button');if(!b)return;[...$('pairs').children].forEach(x=>x.classList.remove('on'));b.classList.add('on');hint(+b.dataset.i)};
  const st=(t,c='')=>{$('lstat').textContent=t;$('lstat').className='mono status '+c};
  const vals=()=>({name:$('fname').value.trim(),symbol:$('fsym').value.trim().toUpperCase(),pair:{...CONFIG.PAIRS[PI],mint:CONFIG.PAIRS[PI].m},buyUi:+$('fbuy').value||0});
