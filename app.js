@@ -21,7 +21,7 @@ $('wclose').onclick=()=>$('wmodal').hidden=true;
 // ---------- shared bits ----------
 const caPill=()=>`<div class="ca"><span class="pill">LAUNCHING</span><span class="mono lbl">$HOLD</span><code title="${CONFIG.MINT}">${short(CONFIG.MINT)}</code><button class="mono cp" data-v="${CONFIG.MINT}">COPY</button></div>`;
 function wireCopy(){V.querySelectorAll('.cp').forEach(b=>b.onclick=()=>{navigator.clipboard.writeText(b.dataset.v);b.textContent='COPIED';setTimeout(()=>b.textContent='COPY',1200)})}
-const live='<span class="note">LIVE AFTER LAUNCH</span>';
+const live='<span class="note">LIVE AFTER THE FIRST LAUNCH</span>';
 const card=(l,v,sub)=>`<div class="sc"><span class="mono lbl">${l}</span><b>${v}</b><small>${sub}</small></div>`;
 const mini=(l,v)=>`<div class="sc mini"><span>${l}</span><b>${v}</b></div>`;
 function nextAt(d){if(d&&d.nextPayoutAt)return new Date(d.nextPayoutAt);const n=new Date(),t=new Date(n);t.setUTCHours(CONFIG.SCHEDULE.payoutUtcHour,0,0,0);while(t<=n)t.setTime(t.getTime()+CONFIG.SCHEDULE.snapshotEveryHours*36e5);return t}
@@ -38,7 +38,7 @@ P['']=()=>{V.className='';V.innerHTML=`<header class="hero"><p class="eyebrow mo
 <div class="ctas"><a class="pri" href="#/launch">Launch a coin</a><a href="#/docs">Read the docs</a></div></header>
 <section><ol class="steps"><li><b>Pick a pair.</b> SOL, stables, majors, memes or a tokenized stock like TSLAx.</li><li><b>Hold.</b> Weight = tokens × days held. Any sell resets your days to 0.</li><li><b>Get paid.</b> Holder fees are paid in the pair token. Stock pair, you're paid in stock.</li></ol>
 ${pairGrid()}
-<div class="split"><div><b>${CONFIG.SPLIT.holders}%</b><span>Holders</span></div><div><b>${CONFIG.SPLIT.buyHold}%</b><span>Buys $HOLD</span></div></div></section>`;wireCopy()};
+<div class="split"><div><b>${CONFIG.SPLIT.holders}%</b><span>Coin holders</span></div><div><b>${CONFIG.SPLIT.buyHold}%</b><span>Buys $HOLD</span></div></div></section>`;wireCopy()};
 P.launch=(arg)=>{V.className='';V.innerHTML=`<div class="page-h" style="text-align:center"><h1>Launch a coin</h1><p style="margin:8px auto 0">Built in your browser, signed by your wallet. We never see a key.</p></div>
 <section class="card launch"><form onsubmit="return false" autocomplete="off">
 <div class="row"><label>Name<input id="fname" maxlength="32" placeholder="Coin name"></label><label class="sm">Ticker<input id="fsym" maxlength="10" placeholder="TICKER"></label></div>
@@ -68,7 +68,7 @@ P.coins=async(arg)=>{V.className='wide';if(arg)return coin(arg);
  <div class="toolbar"><input id="q" placeholder="Search mint or pair"><div class="seg" id="sort"><button class="on" data-s="new">Newest</button><button data-s="mcap">Market cap</button><button data-s="prog">Curve progress</button></div></div>
  <div class="tbl"><table class="t"><thead><tr><th>Coin</th><th>Pair</th><th>Price</th><th>Market cap</th><th>Curve</th><th>Status</th></tr></thead><tbody id="rows"><tr><td colspan="6" class="emptyrow">Loading…</td></tr></tbody></table></div>`;
  const ps=await pools();let s='new';
- const draw=()=>{if(!ps||!ps.length){$('rows').innerHTML=`<tr><td colspan="6" class="emptyrow">${CONFIG.PLATFORM_ID?'No coins launched yet.':'First launches appear here after $HOLD goes live.'}</td></tr>`;return}
+ const draw=()=>{if(!ps||!ps.length){$('rows').innerHTML=`<tr><td colspan="6" class="emptyrow">${CONFIG.PLATFORM_ID?'No coins launched yet.':'First launches appear here once HoldPad goes live.'}</td></tr>`;return}
   const q=$('q').value.trim().toLowerCase();let xs=ps.filter(x=>!q||x.mintA.toLowerCase().includes(q)||sym(x.mintB).toLowerCase().includes(q));
   const pr=x=>x.raised/x.target;xs.sort((a,b)=>s==='mcap'?b.mcap-a.mcap:s==='prog'?pr(b)-pr(a):(+b.epoch)-(+a.epoch));
   $('rows').innerHTML=xs.map(x=>`<tr class="click" data-m="${x.mintA}"><td>${short(x.mintA)}</td><td>${sym(x.mintB)}</td><td>${f(x.price,8)}</td><td>${f(x.mcap)} ${sym(x.mintB)}</td><td>${f(pr(x)*100,1)}%</td><td>${x.status?'Graduated':'Curve'}</td></tr>`).join('');
@@ -81,7 +81,7 @@ async function coin(m){V.innerHTML=`<a class="back" href="#/coins">← Coins</a>
  const lb=kc&&kc.leaderboard||[];
  $('cd').outerHTML=`<div class="cards">${card('PAIR',sym(x.mintB),x.mintB===CONFIG.PAIRS[0].m?'Holders paid in SOL':'Holders paid in '+sym(x.mintB))}${card('CURVE',f(pr*100,1)+'%',`${f(x.raised/10**x.decB)} / ${f(x.target/10**x.decB)} ${sym(x.mintB)}`)}${card('HOLDERS',hs.length?f(hs.length,0):'—','Accounts with a balance, on-chain')}${card('FEES ACCRUED',f(x.platformFee/10**x.decB,6)+' '+sym(x.mintB),'Unclaimed platform fees in the pool')}</div>
  <div class="bar2"><i style="width:${Math.min(100,pr*100)}%"></i></div>
- <div class="sec"><h3>HOLD-WEIGHT LEADERBOARD</h3><p>${kc?'From the keeper snapshot at '+new Date(d.generatedAt).toLocaleString():'Starts with the first keeper snapshot.'}</p>
+ <div class="sec"><h3>HOLD-WEIGHT LEADERBOARD · HOLDPAD-LAUNCHED COINS</h3><p>${kc?'From the keeper snapshot at '+new Date(d.generatedAt).toLocaleString():'Starts with the first keeper snapshot.'}</p>
  <div class="tbl"><table class="t"><thead><tr><th>Rank</th><th>Wallet</th><th>Tokens</th><th>Days held</th><th>Weight</th><th>Est. share</th></tr></thead><tbody>${lb.length?lb.map(r=>`<tr><td>#${r.rank}</td><td>${short(r.wallet)}</td><td>${f(r.tokens,0)}</td><td>${f(r.daysHeld,1)}</td><td>${f(r.weight,0)}</td><td>${f(r.share*100,2)}%</td></tr>`).join(''):'<tr><td colspan="6" class="emptyrow">No snapshot yet.</td></tr>'}</tbody></table></div></div>`}
 P.analytics=async()=>{V.className='wide';
  V.innerHTML=`<div class="page-h"><h1>Analytics</h1><p>Where HoldPad's fees go. Counts come from the LaunchLab platform account on Solana; payout totals come from the keeper's published snapshot.</p></div><div id="ac" class="emptyrow">Loading…</div>`;
@@ -89,15 +89,15 @@ P.analytics=async()=>{V.className='wide';
  const grad=ps?ps.filter(x=>x.status).length:null,stocks=ps?new Set(ps.map(x=>x.mintB).filter(m=>m!==CONFIG.PAIRS[0].m)).size:null;
  const bb=t&&t.buyHold;let sup=null;if(bb){try{sup=await (await lib()).supply(CONFIG,CONFIG.MINT)}catch{}}
  $('ac').outerHTML=`<div class="cards">
- ${card('PAID TO HOLDERS',t?usd(t.paidToHolders.usd):'—',sub(`${usd(t?.paidToHolders.pendingUsd)} more waiting for the next payout`))}
+ ${card('PAID TO COIN HOLDERS',t?usd(t.paidToHolders.usd):'—',sub(`${usd(t?.paidToHolders.pendingUsd)} more waiting for the next payout`))}
  ${card('$HOLD BOUGHT',t?usd(bb.usd):'—',sub(`${f(bb?.holdBought,0)} $HOLD${sup?' · '+f((bb.holdBought/sup)*100,2)+'% of supply':''}`))}
  ${card('COINS LAUNCHED',ps?f(ps.length,0):'0',`${grad==null?0:grad} graduated to Raydium`)}</div>
  <div class="cards" style="margin-top:10px">${mini('Total fees collected',t?usd(t.feesCollected.usd):'—')}${mini('Stocks in use',stocks==null?'0':stocks)}</div>
- ${pre?`<p class="note" style="text-align:left;margin-top:10px">ALL FIGURES GO LIVE AFTER $HOLD LAUNCHES. NOTHING ON THIS PAGE IS ESTIMATED OR SAMPLE DATA.</p>`:''}
- <div class="sec"><h3>TOP HOLDERS BY HOLD WEIGHT</h3><p>Next payout: <span class="cd" id="cdn"></span> · ${esc(nextAt(d).toLocaleString())}. Weight = tokens × days held without selling, across every HoldPad coin. Any sell resets that coin's days to 0.</p>
+ ${pre?`<p class="note" style="text-align:left;margin-top:10px">ALL FIGURES GO LIVE ONCE THE FIRST COINS LAUNCH ON HOLDPAD. NOTHING ON THIS PAGE IS ESTIMATED OR SAMPLE DATA.</p>`:''}
+ <div class="sec"><h3>TOP HOLDERS OF HOLDPAD-LAUNCHED COINS</h3><p>Ranks wallets holding coins launched on HoldPad. Next payout: <span class="cd" id="cdn"></span> · ${esc(nextAt(d).toLocaleString())}. Weight = tokens × days held without selling, across every coin launched on HoldPad. Any sell resets that coin's days to 0.</p>
  <div class="lookup"><input id="lk" placeholder="Paste a wallet address to see its rank"><button id="lkb" type="button">Look up</button></div><p class="mono status" id="lkr"></p>
  <div class="tbl"><table class="t"><thead><tr><th>Rank</th><th>Wallet</th><th>Tokens</th><th>Days held</th><th>Weight</th><th>Est. share</th></tr></thead><tbody>
- ${d&&d.leaderboard&&d.leaderboard.length?d.leaderboard.slice(0,100).map(r=>`<tr><td>#${r.rank}</td><td>${short(r.wallet)}</td><td>${f(r.tokens,0)}</td><td>${f(r.daysHeld,1)}</td><td>${f(r.weight,0)}</td><td>${f(r.share*100,2)}%</td></tr>`).join(''):'<tr><td colspan="6" class="emptyrow">The leaderboard starts with the first snapshot after $HOLD goes live.</td></tr>'}</tbody></table></div></div>`;
+ ${d&&d.leaderboard&&d.leaderboard.length?d.leaderboard.slice(0,100).map(r=>`<tr><td>#${r.rank}</td><td>${short(r.wallet)}</td><td>${f(r.tokens,0)}</td><td>${f(r.daysHeld,1)}</td><td>${f(r.weight,0)}</td><td>${f(r.share*100,2)}%</td></tr>`).join(''):'<tr><td colspan="6" class="emptyrow">The leaderboard starts with the first snapshot after coins launch on HoldPad.</td></tr>'}</tbody></table></div></div>`;
  countdown($('cdn'),nextAt(d));
  const look=()=>{const w=$('lk').value.trim();const r=d&&d.leaderboard&&d.leaderboard.find(x=>x.wallet===w);$('lkr').textContent=!w?'':r?`Rank #${r.rank} · weight ${f(r.weight,0)} · est. share ${f(r.share*100,2)}%`:d?'Not on the leaderboard yet.':'No snapshot yet. Check back after launch.'};
  $('lkb').onclick=look;$('lk').onkeydown=e=>e.key==='Enter'&&look();const pk=L&&L.pubkey();if(pk){$('lk').value=pk;look()}};
@@ -121,7 +121,7 @@ P.docs=()=>{V.className='wide';const plat=CONFIG.PLATFORM_ID||'';const w=CONFIG.
  <h2 id="d-fees">Fee split</h2><p>Every trade on a HoldPad coin pays a ${CONFIG.FEES.raydium+CONFIG.FEES.platform}% fee: ${CONFIG.FEES.raydium}% to Raydium and ${CONFIG.FEES.platform}% to HoldPad. No creator fee. HoldPad's share is split:</p><div class="tbl"><table class="t"><tbody><tr><td>Holders</td><td style="text-align:left;color:var(--mut)">By hold weight, paid in the pair token</td><td>${CONFIG.SPLIT.holders}%</td></tr><tr><td>Buys $HOLD</td><td style="text-align:left;color:var(--mut)">Market buys of $HOLD</td><td>${CONFIG.SPLIT.buyHold}%</td></tr></tbody></table></div>
  <h2 id="d-payouts">Payouts</h2><p>The keeper claims platform fees, snapshots holders, and pays out daily at ${String(CONFIG.SCHEDULE.payoutUtcHour).padStart(2,'0')}:00 UTC. Every payout is an on-chain transfer and the totals are published to <code>${CONFIG.DATA_URL}</code>.</p>
  <h2 id="d-contracts">Contracts</h2><div class="kv"><span>$HOLD mint</span><code>${CONFIG.MINT}</code><span>Raydium LaunchLab</span><code>${CONFIG.LAUNCHLAB}</code><span>Platform account</span><code>${plat||CONFIG.PLATFORM_EXPECTED+' (not created yet)'}</code><span>Dev wallet</span><code>${CONFIG.DEV}</code><span>Fee treasury</span>${w.fee?`<a href="https://solscan.io/account/${w.fee}" target="_blank" rel="noopener"><code>${w.fee}</code></a>`:'<code>not set</code>'}${w.buyHold&&w.buyHold!==w.fee?`<span>$HOLD buy wallet</span><a href="https://solscan.io/account/${w.buyHold}" target="_blank" rel="noopener"><code>${w.buyHold}</code></a>`:''}</div>
- <h2 id="d-faq">FAQ</h2><details><summary>What resets my clock?</summary><p>Any drop in your balance between snapshots.</p></details><details><summary>Who holds the keys?</summary><p>You do. Launches are signed by your own wallet.</p></details><details><summary>Where do fees go?</summary><p>${CONFIG.SPLIT.holders}% to holders by hold weight, ${CONFIG.SPLIT.buyHold}% buys $HOLD.</p></details><details><summary>Are the numbers real?</summary><p>Yes. Counts are read from chain, payouts from the keeper's published snapshot. Before launch they show zero.</p></details>
+ <h2 id="d-faq">FAQ</h2><details><summary>What resets my clock?</summary><p>Any drop in your balance between snapshots.</p></details><details><summary>Who holds the keys?</summary><p>You do. Launches are signed by your own wallet.</p></details><details><summary>Where do fees go?</summary><p>${CONFIG.SPLIT.holders}% to the holders of that coin by hold weight, ${CONFIG.SPLIT.buyHold}% buys $HOLD.</p></details><details><summary>Are the numbers real?</summary><p>Yes. Counts are read from chain, payouts from the keeper's published snapshot. Before launch they show zero.</p></details>
  </article></div>`;V.querySelectorAll('[data-j]').forEach(a=>a.onclick=()=>$('d-'+a.dataset.j).scrollIntoView({behavior:'smooth'}))};
 function route(){clearInterval(cdT);const [p,arg]=(location.hash.replace(/^#\/?/,'')).split('/');const k=P[p]?p:'';
  document.querySelectorAll('#nav a,#tabbar a').forEach(a=>a.classList.toggle('on',(a.getAttribute('href').replace('#/',''))===k));
