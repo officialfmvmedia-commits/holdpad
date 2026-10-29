@@ -1,6 +1,7 @@
 export const CONFIG={MINT:'9M4Ukvsh2LGjbxWsgmFBnykynuJpTUvP7sAAobbrFF6K',DEV:'HurAwDG4KCLb8Y38JWcXUcU6ZvHYoND7XntiomyvZAfv',
 RPC:['https://solana-rpc.publicnode.com','https://api.mainnet-beta.solana.com'],
-SPLIT:{holders:90,buyHold:10}, // % of fees from coins launched on HoldPad
+SPLIT:{holders:90,buyHold:10}, // % of HoldPad's fees (1.75% platform fee on curve trades + post-graduation LP fees)
+FEES:{raydium:0.25,platform:1.75,creator:0},
 // Quote tokens. Every mint verified on-chain (Token-2022, metadata symbol matches) on 2026-10-29.
 // Quote tokens. Each mint verified on-chain AND each has a Raydium LaunchLab global config; a create tx simulated PASS for every one (2026-10-29).
 // raise = bonding-curve graduation target in quote units (~$15k for stocks at Oct-29 prices; 85 SOL for SOL). Decision pending.
@@ -230,8 +231,8 @@ RPC_GPA:['https://api.mainnet-beta.solana.com'],
 SIM_PAYER:'5tzFkiKscXHK5ZXCGbXZxdw7gTjjD1mBwuoFbhUvuAi9', // any funded pubkey, used only to simulate when no wallet is connected
 weight:(t,d)=>Math.max(0,t)*Math.max(0,d),
 LAUNCHLAB:'LanMV9sAd7wArD4vJFi2qDdfnVhFxYSUg6eADduJ3uj',
-PLATFORM_ADMIN:'HurAwDG4KCLb8Y38JWcXUcU6ZvHYoND7XntiomyvZAfv',
-PLATFORM_EXPECTED:'5Rp57pG59yQSbR2ZxQA9bVcH1Tr7QMk98aC9KDCsTWLN', // PDA from admin; becomes PLATFORM_ID once created
+PLATFORM_ADMIN:'BzLLvPcULF9TZxT2ZqfLmWtq9eoYYrKAUHSWMkHWNkNQ',
+PLATFORM_EXPECTED:'Gzc5SwNSysRNvuemMK1JZynGdsumyxzQ8GHHZ2CVuCW6', // PDA from admin; becomes PLATFORM_ID once created
 WALLETS:{fee:'BzLLvPcULF9TZxT2ZqfLmWtq9eoYYrKAUHSWMkHWNkNQ',buyHold:'BzLLvPcULF9TZxT2ZqfLmWtq9eoYYrKAUHSWMkHWNkNQ'}, // set once decided; empty = shown as 'not set'
 DATA_URL:'data/analytics.json', // written by keeper/keeper.mjs
 SCHEDULE:{snapshotEveryHours:24,payoutUtcHour:16}, // decision pending
