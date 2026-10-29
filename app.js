@@ -1,4 +1,4 @@
-import {CONFIG} from './config.js?v=20261029m'
+import {CONFIG} from './config.js?v=20261029n'
 const $=id=>document.getElementById(id),V=$('view');
 const f=(n,d=2)=>n==null||isNaN(n)?'—':(+n).toLocaleString('en-US',{maximumFractionDigits:d});
 const usd=n=>n==null?'—':'$'+(Math.abs(n)>=1e6?f(n/1e6)+'M':Math.abs(n)>=1e3?f(n/1e3)+'K':f(n));
@@ -6,7 +6,7 @@ const short=a=>a?a.slice(0,4)+'…'+a.slice(-4):'—';
 const sym=m=>(CONFIG.PAIRS.find(p=>p.m===m)||{s:short(m)}).s;
 const safeUrl=u=>/^https:\/\//i.test(u||'')?u:'';const cImg=(x,z=28)=>{const u=safeUrl(x.meta&&x.meta.image);return u?`<img src="${esc(u)}" alt="" width="${z}" height="${z}" style="border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:8px" loading="lazy">`:''};const coinName=x=>x.meta&&x.meta.name?`${esc(x.meta.name)} <span class="mono" style="opacity:.6">$${esc(x.meta.symbol)}</span>`:esc(short(x.mintA));
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-let L=null;const lib=async()=>L||(L=await import('./launch.bundle.js?v=20261029m'));
+let L=null;const lib=async()=>L||(L=await import('./launch.bundle.js?v=20261029n'));
 // ---------- data (cached) ----------
 let DATA,POOLS;
 async function data(){if(DATA!==undefined)return DATA;try{const r=await fetch(CONFIG.DATA_URL,{cache:'no-store'});DATA=r.ok?await r.json():null}catch{DATA=null}return DATA}
@@ -28,7 +28,7 @@ const mini=(l,v)=>`<div class="sc mini"><span>${l}</span><b>${v}</b></div>`;
 function nextAt(d){if(d&&d.nextPayoutAt)return new Date(d.nextPayoutAt);const n=new Date(),t=new Date(n);t.setUTCHours(CONFIG.SCHEDULE.payoutUtcHour,0,0,0);while(t<=n)t.setTime(t.getTime()+CONFIG.SCHEDULE.snapshotEveryHours*36e5);return t}
 let cdT;function countdown(el,t){clearInterval(cdT);const tick=()=>{let s=Math.max(0,(t-Date.now())/1e3|0);el.textContent=`${s/86400|0}d ${(s%86400)/3600|0}h ${(s%3600)/60|0}m ${s%60}s`};tick();cdT=setInterval(tick,1000)}
 const PC={SOL:['#9945FF','#14F195'],USDC:['#3b8cff','#1a3f8f'],USDT:['#2fd3a0','#0b6b52'],SPCXx:['#2b2f3a','#9aa4b8'],TSLAx:['#ff3b3b','#7a0d12'],NVDAx:['#9be33a','#2f6b00'],AAPLx:['#e9e9ee','#7c7c86'],GOOGLx:['#4f8cff','#1aa260'],METAx:['#3d7bff','#7a3dff'],AMZNx:['#ffb43a','#b35a00'],MSTRx:['#ff8a1f','#a12a00'],COINx:['#2f6bff','#0b2aa8'],HOODx:['#c6ff3a','#3f8f00'],CRCLx:['#46d4ff','#5a3dff'],SPYx:['#e8e2c8','#8a7a4a'],QQQx:['#33e0c0','#0a5f7a']};
-const icon=p=>p&&p.i?'img/pairs/'+p.i+'?v=20261029m':'';const TL={crypto:'Crypto',xstock:'xStock',stock:'Stock'};const mono=s=>s.replace(/x$/,'').replace(/\..*/,'').slice(0,5);
+const icon=p=>p&&p.i?'img/pairs/'+p.i+'?v=20261029n':'';const TL={crypto:'Crypto',xstock:'xStock',stock:'Stock'};const mono=s=>s.replace(/x$/,'').replace(/\..*/,'').slice(0,5);
 const coinImg=p=>{const b=mono(p.s);return icon(p)?`<img src="${icon(p)}" alt="" width="96" height="96" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'mg',textContent:'${b}'}))">`:`<span class="mg" style="font-size:${b.length>4?14:b.length>3?16:b.length>2?19:24}px">${b}</span>`};
 function pairGrid(){const N=13,sh=CONFIG.PAIRS.slice(0,N),more=CONFIG.PAIRS.length-N;return `<div class="pg"><p class="pg-h mono">${CONFIG.PAIRS.length} PAIRS · HOLDERS PAID IN THE PAIR</p><div class="pg-g">${sh.map((p,i)=>{const c=PC[p.s]||['#3a3a34','#121210'];
 return `<a class="tk" href="#/launch/${encodeURIComponent(p.s)}" title="Launch paired to ${p.n}" style="--a:${c[0]};--b:${c[1]};--d:${(i%7)*.35}s"><span class="coin"><span class="face">${coinImg(p)}</span></span><b class="mono">${p.s}</b><i>${p.s==='SOL'?'Native':TL[p.t]}</i></a>`}).join('')}<a class="tk more" href="#/launch" style="--a:#E8FF3A;--b:#6b7a00;--d:1.2s"><span class="coin"><span class="face"><span class="mg" style="color:#000;text-shadow:none;font-size:17px">+${more}</span></span></span><b class="mono">More</b><i>All pairs</i></a></div></div>`}
