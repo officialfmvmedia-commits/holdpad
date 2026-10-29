@@ -1,11 +1,11 @@
-import {CONFIG} from './config.js?v=20261029k'
+import {CONFIG} from './config.js?v=20261029l'
 const $=id=>document.getElementById(id),V=$('view');
 const f=(n,d=2)=>n==null||isNaN(n)?'—':(+n).toLocaleString('en-US',{maximumFractionDigits:d});
 const usd=n=>n==null?'—':'$'+(Math.abs(n)>=1e6?f(n/1e6)+'M':Math.abs(n)>=1e3?f(n/1e3)+'K':f(n));
 const short=a=>a?a.slice(0,4)+'…'+a.slice(-4):'—';
 const sym=m=>(CONFIG.PAIRS.find(p=>p.m===m)||{s:short(m)}).s;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-let L=null;const lib=async()=>L||(L=await import('./launch.bundle.js?v=20261029k'));
+let L=null;const lib=async()=>L||(L=await import('./launch.bundle.js?v=20261029l'));
 // ---------- data (cached) ----------
 let DATA,POOLS;
 async function data(){if(DATA!==undefined)return DATA;try{const r=await fetch(CONFIG.DATA_URL,{cache:'no-store'});DATA=r.ok?await r.json():null}catch{DATA=null}return DATA}
@@ -27,7 +27,7 @@ const mini=(l,v)=>`<div class="sc mini"><span>${l}</span><b>${v}</b></div>`;
 function nextAt(d){if(d&&d.nextPayoutAt)return new Date(d.nextPayoutAt);const n=new Date(),t=new Date(n);t.setUTCHours(CONFIG.SCHEDULE.payoutUtcHour,0,0,0);while(t<=n)t.setTime(t.getTime()+CONFIG.SCHEDULE.snapshotEveryHours*36e5);return t}
 let cdT;function countdown(el,t){clearInterval(cdT);const tick=()=>{let s=Math.max(0,(t-Date.now())/1e3|0);el.textContent=`${s/86400|0}d ${(s%86400)/3600|0}h ${(s%3600)/60|0}m ${s%60}s`};tick();cdT=setInterval(tick,1000)}
 const PC={SOL:['#9945FF','#14F195'],USDC:['#3b8cff','#1a3f8f'],USDT:['#2fd3a0','#0b6b52'],SPCXx:['#2b2f3a','#9aa4b8'],TSLAx:['#ff3b3b','#7a0d12'],NVDAx:['#9be33a','#2f6b00'],AAPLx:['#e9e9ee','#7c7c86'],GOOGLx:['#4f8cff','#1aa260'],METAx:['#3d7bff','#7a3dff'],AMZNx:['#ffb43a','#b35a00'],MSTRx:['#ff8a1f','#a12a00'],COINx:['#2f6bff','#0b2aa8'],HOODx:['#c6ff3a','#3f8f00'],CRCLx:['#46d4ff','#5a3dff'],SPYx:['#e8e2c8','#8a7a4a'],QQQx:['#33e0c0','#0a5f7a']};
-const icon=p=>p&&p.i?'img/pairs/'+p.i+'?v=20261029k':'';const TL={crypto:'Crypto',xstock:'xStock',stock:'Stock'};const mono=s=>s.replace(/x$/,'').replace(/\..*/,'').slice(0,5);
+const icon=p=>p&&p.i?'img/pairs/'+p.i+'?v=20261029l':'';const TL={crypto:'Crypto',xstock:'xStock',stock:'Stock'};const mono=s=>s.replace(/x$/,'').replace(/\..*/,'').slice(0,5);
 const coinImg=p=>{const b=mono(p.s);return icon(p)?`<img src="${icon(p)}" alt="" width="96" height="96" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'mg',textContent:'${b}'}))">`:`<span class="mg" style="font-size:${b.length>4?14:b.length>3?16:b.length>2?19:24}px">${b}</span>`};
 function pairGrid(){const N=13,sh=CONFIG.PAIRS.slice(0,N),more=CONFIG.PAIRS.length-N;return `<div class="pg"><p class="pg-h mono">${CONFIG.PAIRS.length} PAIRS · HOLDERS PAID IN THE PAIR</p><div class="pg-g">${sh.map((p,i)=>{const c=PC[p.s]||['#3a3a34','#121210'];
 return `<a class="tk" href="#/launch/${encodeURIComponent(p.s)}" title="Launch paired to ${p.n}" style="--a:${c[0]};--b:${c[1]};--d:${(i%7)*.35}s"><span class="coin"><span class="face">${coinImg(p)}</span></span><b class="mono">${p.s}</b><i>${p.s==='SOL'?'Native':TL[p.t]}</i></a>`}).join('')}<a class="tk more" href="#/launch" style="--a:#E8FF3A;--b:#6b7a00;--d:1.2s"><span class="coin"><span class="face"><span class="mg" style="color:#000;text-shadow:none;font-size:17px">+${more}</span></span></span><b class="mono">More</b><i>All pairs</i></a></div></div>`}
@@ -47,7 +47,7 @@ P.launch=(arg)=>{V.className='';V.innerHTML=`<div class="page-h" style="text-ali
 <div class="row"><label>X<input id="fx" placeholder="https://x.com/…"></label><label>Website<input id="fweb" placeholder="https://"></label></div>
 <label>Pair with <span class="hint" id="pairhint"></span></label><div class="pairs" id="pairs"></div>
 <label>First buy <span class="hint" id="buyunit">SOL</span><input id="fbuy" type="number" min="0" step="any" value="0"></label>
-<div class="acts"><button class="go2" id="bsim" type="button">Simulate</button><button class="go" id="blaunch" type="button">Launch</button></div><p class="mono status" id="lstat"></p></form></section>`;
+<div class="acts"><button class="go" id="blaunch" type="button">Launch</button></div><p class="mono status" id="lstat"></p></form></section>`;
  let PI=0,TAB='all',Q='';const PL=$('pairs');PL.className='pk';PL.innerHTML=`<div class="pk-top"><div class="pk-tabs">${[['all','All'],['crypto','Crypto'],['xstock','xStocks'],['stock','Stocks']].map(([k,t])=>`<button type="button" data-t="${k}" class="${k==='all'?'on':''}">${t} <span>${k==='all'?CONFIG.PAIRS.length:CONFIG.PAIRS.filter(p=>p.t===k).length}</span></button>`).join('')}</div><input id="pkq" placeholder="Search ${CONFIG.PAIRS.length} pairs" autocomplete="off"></div><div class="pk-list" id="pkl"></div>`;
  const hint=i=>{PI=i;$('pairhint').textContent='· holders paid in '+CONFIG.PAIRS[i].s;$('buyunit').textContent=CONFIG.PAIRS[i].s};
  const draw=()=>{const q=Q.toLowerCase();$('pkl').innerHTML=CONFIG.PAIRS.map((p,i)=>[p,i]).filter(([p])=>(TAB==='all'||p.t===TAB)&&(!q||p.s.toLowerCase().includes(q)||p.n.toLowerCase().includes(q)||p.m===Q)).map(([p,i])=>`<button type="button" data-i="${i}" class="${i===PI?'on':''}" title="${p.m}"><span class="pk-ic">${coinImg(p)}</span><span class="pk-tx"><b>${p.s}<em>${p.s==='SOL'?'Native':TL[p.t]}</em></b><small>${p.n}</small></span></button>`).join('')||'<p class="pk-none">No pairs match.</p>'};
@@ -57,7 +57,7 @@ P.launch=(arg)=>{V.className='';V.innerHTML=`<div class="page-h" style="text-ali
  const st=(t,c='')=>{$('lstat').textContent=t;$('lstat').className='mono status '+c};
  const vals=()=>({name:$('fname').value.trim(),symbol:$('fsym').value.trim().toUpperCase(),pair:{...CONFIG.PAIRS[PI],mint:CONFIG.PAIRS[PI].m},buyUi:+$('fbuy').value||0});
  const b=$('blaunch'),pk=L&&L.pubkey();b.disabled=!(pk&&CONFIG.IPFS_ENDPOINT);b.textContent=!CONFIG.IPFS_ENDPOINT?'Launch (upload not configured)':!pk?'Select a wallet to launch':'Launch';if(!CONFIG.IPFS_ENDPOINT)$('lstat').textContent='Image upload is coming online shortly, so launching is paused for a moment. You can still Simulate.';
- $('bsim').onclick=async()=>{const v=vals();if(!v.name||!v.symbol)return st('Name and ticker first.','bad');st('Building and simulating…');
+ if($('bsim'))$('bsim').onclick=async()=>{const v=vals();if(!v.name||!v.symbol)return st('Name and ticker first.','bad');st('Building and simulating…');
   try{const r=await (await lib()).simulate(CONFIG,{...v,uri:'https://example.invalid/metadata.json'});st(r.ok?`Simulation passed · ${r.units} CU · payer ${short(r.payer)} · nothing sent`:`Simulation failed: ${JSON.stringify(r.err)} ${r.logs.slice(-2).join(' ')}`,r.ok?'ok':'bad')}catch(e){st(e.message,'bad')}};
  b.onclick=async()=>{if(!CONFIG.IPFS_ENDPOINT)return st('Image upload is not online yet. Launching opens as soon as it is.','bad');const v=vals(),fi=$('fimg').files[0];if(!v.name||!v.symbol||!fi)return st('Name, ticker and image are required.','bad');if(!/^image\/(png|jpeg|gif|webp)$/.test(fi.type))return st('Image must be PNG, JPEG, GIF or WebP.','bad');if(fi.size>4194304)return st('Image max 4 MB.','bad');if(!/^[A-Z0-9]{1,10}$/.test(v.symbol))return st('Ticker: 1-10 letters or digits.','bad');
   try{st('Uploading image and metadata…');const fd=new FormData();fd.append('file',fi);for(const[k,id]of[['name','fname'],['symbol','fsym'],['description','fdesc'],['twitter','fx'],['website','fweb']])fd.append(k,$(id).value);
