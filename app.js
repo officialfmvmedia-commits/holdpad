@@ -1,15 +1,16 @@
-import {CONFIG} from './config.js?v=20261029l'
+import {CONFIG} from './config.js?v=20261029m'
 const $=id=>document.getElementById(id),V=$('view');
 const f=(n,d=2)=>n==null||isNaN(n)?'—':(+n).toLocaleString('en-US',{maximumFractionDigits:d});
 const usd=n=>n==null?'—':'$'+(Math.abs(n)>=1e6?f(n/1e6)+'M':Math.abs(n)>=1e3?f(n/1e3)+'K':f(n));
 const short=a=>a?a.slice(0,4)+'…'+a.slice(-4):'—';
 const sym=m=>(CONFIG.PAIRS.find(p=>p.m===m)||{s:short(m)}).s;
+const safeUrl=u=>/^https:\/\//i.test(u||'')?u:'';const cImg=(x,z=28)=>{const u=safeUrl(x.meta&&x.meta.image);return u?`<img src="${esc(u)}" alt="" width="${z}" height="${z}" style="border-radius:50%;object-fit:cover;vertical-align:middle;margin-right:8px" loading="lazy">`:''};const coinName=x=>x.meta&&x.meta.name?`${esc(x.meta.name)} <span class="mono" style="opacity:.6">$${esc(x.meta.symbol)}</span>`:esc(short(x.mintA));
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-let L=null;const lib=async()=>L||(L=await import('./launch.bundle.js?v=20261029l'));
+let L=null;const lib=async()=>L||(L=await import('./launch.bundle.js?v=20261029m'));
 // ---------- data (cached) ----------
 let DATA,POOLS;
 async function data(){if(DATA!==undefined)return DATA;try{const r=await fetch(CONFIG.DATA_URL,{cache:'no-store'});DATA=r.ok?await r.json():null}catch{DATA=null}return DATA}
-async function pools(){if(POOLS!==undefined)return POOLS;if(!CONFIG.PLATFORM_ID)return POOLS=null;try{POOLS=await (await lib()).listLaunches(CONFIG)}catch{POOLS=null}return POOLS}
+async function pools(){if(POOLS!==undefined)return POOLS;if(!CONFIG.PLATFORM_ID)return POOLS=null;try{POOLS=await (await lib()).listLaunches(CONFIG)}catch{POOLS=undefined;return null}return POOLS}
 // ---------- wallet ----------
 const WALLETS=[['phantom','Phantom',()=>window.phantom?.solana],['solflare','Solflare',()=>window.solflare],['backpack','Backpack',()=>window.backpack]];
 function renderWal(){const pk=L&&L.pubkey();const w=$('walbtn');
@@ -27,7 +28,7 @@ const mini=(l,v)=>`<div class="sc mini"><span>${l}</span><b>${v}</b></div>`;
 function nextAt(d){if(d&&d.nextPayoutAt)return new Date(d.nextPayoutAt);const n=new Date(),t=new Date(n);t.setUTCHours(CONFIG.SCHEDULE.payoutUtcHour,0,0,0);while(t<=n)t.setTime(t.getTime()+CONFIG.SCHEDULE.snapshotEveryHours*36e5);return t}
 let cdT;function countdown(el,t){clearInterval(cdT);const tick=()=>{let s=Math.max(0,(t-Date.now())/1e3|0);el.textContent=`${s/86400|0}d ${(s%86400)/3600|0}h ${(s%3600)/60|0}m ${s%60}s`};tick();cdT=setInterval(tick,1000)}
 const PC={SOL:['#9945FF','#14F195'],USDC:['#3b8cff','#1a3f8f'],USDT:['#2fd3a0','#0b6b52'],SPCXx:['#2b2f3a','#9aa4b8'],TSLAx:['#ff3b3b','#7a0d12'],NVDAx:['#9be33a','#2f6b00'],AAPLx:['#e9e9ee','#7c7c86'],GOOGLx:['#4f8cff','#1aa260'],METAx:['#3d7bff','#7a3dff'],AMZNx:['#ffb43a','#b35a00'],MSTRx:['#ff8a1f','#a12a00'],COINx:['#2f6bff','#0b2aa8'],HOODx:['#c6ff3a','#3f8f00'],CRCLx:['#46d4ff','#5a3dff'],SPYx:['#e8e2c8','#8a7a4a'],QQQx:['#33e0c0','#0a5f7a']};
-const icon=p=>p&&p.i?'img/pairs/'+p.i+'?v=20261029l':'';const TL={crypto:'Crypto',xstock:'xStock',stock:'Stock'};const mono=s=>s.replace(/x$/,'').replace(/\..*/,'').slice(0,5);
+const icon=p=>p&&p.i?'img/pairs/'+p.i+'?v=20261029m':'';const TL={crypto:'Crypto',xstock:'xStock',stock:'Stock'};const mono=s=>s.replace(/x$/,'').replace(/\..*/,'').slice(0,5);
 const coinImg=p=>{const b=mono(p.s);return icon(p)?`<img src="${icon(p)}" alt="" width="96" height="96" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'mg',textContent:'${b}'}))">`:`<span class="mg" style="font-size:${b.length>4?14:b.length>3?16:b.length>2?19:24}px">${b}</span>`};
 function pairGrid(){const N=13,sh=CONFIG.PAIRS.slice(0,N),more=CONFIG.PAIRS.length-N;return `<div class="pg"><p class="pg-h mono">${CONFIG.PAIRS.length} PAIRS · HOLDERS PAID IN THE PAIR</p><div class="pg-g">${sh.map((p,i)=>{const c=PC[p.s]||['#3a3a34','#121210'];
 return `<a class="tk" href="#/launch/${encodeURIComponent(p.s)}" title="Launch paired to ${p.n}" style="--a:${c[0]};--b:${c[1]};--d:${(i%7)*.35}s"><span class="coin"><span class="face">${coinImg(p)}</span></span><b class="mono">${p.s}</b><i>${p.s==='SOL'?'Native':TL[p.t]}</i></a>`}).join('')}<a class="tk more" href="#/launch" style="--a:#E8FF3A;--b:#6b7a00;--d:1.2s"><span class="coin"><span class="face"><span class="mg" style="color:#000;text-shadow:none;font-size:17px">+${more}</span></span></span><b class="mono">More</b><i>All pairs</i></a></div></div>`}
@@ -56,27 +57,26 @@ P.launch=(arg)=>{V.className='';V.innerHTML=`<div class="page-h" style="text-ali
  {const j=CONFIG.PAIRS.findIndex(p=>p.s.toLowerCase()===decodeURIComponent(String(arg||'')).toLowerCase());hint(j>0?j:0);draw();if(j>0)setTimeout(()=>$('pkl').querySelector('.on')?.scrollIntoView({block:'nearest'}),0)}
  const st=(t,c='')=>{$('lstat').textContent=t;$('lstat').className='mono status '+c};
  const vals=()=>({name:$('fname').value.trim(),symbol:$('fsym').value.trim().toUpperCase(),pair:{...CONFIG.PAIRS[PI],mint:CONFIG.PAIRS[PI].m},buyUi:+$('fbuy').value||0});
- const b=$('blaunch'),pk=L&&L.pubkey();b.disabled=!(pk&&CONFIG.IPFS_ENDPOINT);b.textContent=!CONFIG.IPFS_ENDPOINT?'Launch (upload not configured)':!pk?'Select a wallet to launch':'Launch';if(!CONFIG.IPFS_ENDPOINT)$('lstat').textContent='Image upload is coming online shortly, so launching is paused for a moment. You can still Simulate.';
- if($('bsim'))$('bsim').onclick=async()=>{const v=vals();if(!v.name||!v.symbol)return st('Name and ticker first.','bad');st('Building and simulating…');
-  try{const r=await (await lib()).simulate(CONFIG,{...v,uri:'https://example.invalid/metadata.json'});st(r.ok?`Simulation passed · ${r.units} CU · payer ${short(r.payer)} · nothing sent`:`Simulation failed: ${JSON.stringify(r.err)} ${r.logs.slice(-2).join(' ')}`,r.ok?'ok':'bad')}catch(e){st(e.message,'bad')}};
+ const b=$('blaunch'),pk=L&&L.pubkey();b.disabled=!(pk&&CONFIG.IPFS_ENDPOINT);b.textContent=!CONFIG.IPFS_ENDPOINT?'Launch (upload not configured)':!pk?'Select a wallet to launch':'Launch';if(!CONFIG.IPFS_ENDPOINT)$('lstat').textContent='Image upload is coming online shortly, so launching is paused for a moment.';
  b.onclick=async()=>{if(!CONFIG.IPFS_ENDPOINT)return st('Image upload is not online yet. Launching opens as soon as it is.','bad');const v=vals(),fi=$('fimg').files[0];if(!v.name||!v.symbol||!fi)return st('Name, ticker and image are required.','bad');if(!/^image\/(png|jpeg|gif|webp)$/.test(fi.type))return st('Image must be PNG, JPEG, GIF or WebP.','bad');if(fi.size>4194304)return st('Image max 4 MB.','bad');if(!/^[A-Z0-9]{1,10}$/.test(v.symbol))return st('Ticker: 1-10 letters or digits.','bad');
   try{st('Uploading image and metadata…');const fd=new FormData();fd.append('file',fi);for(const[k,id]of[['name','fname'],['symbol','fsym'],['description','fdesc'],['twitter','fx'],['website','fweb']])fd.append(k,$(id).value);
   let up;try{up=await fetch(CONFIG.IPFS_ENDPOINT,{method:'POST',body:fd})}catch{throw new Error('Upload service unreachable. Try again in a minute.')}const uj=await up.json().catch(()=>({}));if(!up.ok)throw new Error('Upload failed: '+(uj.error||up.status));const {uri}=uj;if(!uri)throw new Error('Upload failed: no URI returned');st('Uploaded · '+uri.split('/').pop().slice(0,12)+'…');
   st('Check your wallet to sign…');const r=await (await lib()).launch(CONFIG,{...v,uri});POOLS=undefined;st(`Launched · ${r.mintA} · tx ${r.sig.slice(0,10)}…`,'ok')}catch(e){st(e.message,'bad')}}};
 P.coins=async(arg)=>{V.className='wide';if(arg)return coin(arg);
  V.innerHTML=`<div class="page-h"><h1>Coins</h1><p>Every coin launched on the HoldPad platform, read from Raydium LaunchLab on-chain.</p></div>
- <div class="toolbar"><input id="q" placeholder="Search mint or pair"><div class="seg" id="sort"><button class="on" data-s="new">Newest</button><button data-s="mcap">Market cap</button><button data-s="prog">Curve progress</button></div></div>
+ <div class="toolbar"><input id="q" placeholder="Search name, ticker, mint or pair"><div class="seg" id="sort"><button class="on" data-s="new">Newest</button><button data-s="mcap">Market cap</button><button data-s="prog">Curve progress</button></div></div>
  <div class="tbl"><table class="t"><thead><tr><th>Coin</th><th>Pair</th><th>Price</th><th>Market cap</th><th>Curve</th><th>Status</th></tr></thead><tbody id="rows"><tr><td colspan="6" class="emptyrow">Loading…</td></tr></tbody></table></div>`;
  const ps=await pools();let s='new';
  const draw=()=>{if(!ps||!ps.length){$('rows').innerHTML=`<tr><td colspan="6" class="emptyrow">${CONFIG.PLATFORM_ID?'No coins launched yet.':'First launches appear here once HoldPad goes live.'}</td></tr>`;return}
-  const q=$('q').value.trim().toLowerCase();let xs=ps.filter(x=>!q||x.mintA.toLowerCase().includes(q)||sym(x.mintB).toLowerCase().includes(q));
+  const q=$('q').value.trim().toLowerCase();let xs=ps.filter(x=>!q||x.mintA.toLowerCase().includes(q)||(x.meta&&(x.meta.name+' '+x.meta.symbol).toLowerCase().includes(q))||sym(x.mintB).toLowerCase().includes(q));
   const pr=x=>x.raised/x.target;xs.sort((a,b)=>s==='mcap'?b.mcap-a.mcap:s==='prog'?pr(b)-pr(a):(+b.epoch)-(+a.epoch));
-  $('rows').innerHTML=xs.map(x=>`<tr class="click" data-m="${x.mintA}"><td>${short(x.mintA)}</td><td>${sym(x.mintB)}</td><td>${f(x.price,8)}</td><td>${f(x.mcap)} ${sym(x.mintB)}</td><td>${f(pr(x)*100,1)}%</td><td>${x.status?'Graduated':'Curve'}</td></tr>`).join('');
+  $('rows').innerHTML=xs.map(x=>`<tr class="click" data-m="${x.mintA}"><td>${cImg(x)}${coinName(x)}</td><td>${sym(x.mintB)}</td><td>${f(x.price,8)}</td><td>${f(x.mcap)} ${sym(x.mintB)}</td><td>${f(pr(x)*100,1)}%</td><td>${x.status?'Graduated':'Curve'}</td></tr>`).join('');
   $('rows').querySelectorAll('tr.click').forEach(r=>r.onclick=()=>location.hash='#/coins/'+r.dataset.m)};
  $('q').oninput=draw;$('sort').onclick=e=>{const b=e.target.closest('button');if(!b)return;s=b.dataset.s;[...$('sort').children].forEach(x=>x.classList.toggle('on',x===b));draw()};draw()};
 async function coin(m){V.innerHTML=`<a class="back" href="#/coins">← Coins</a><div class="page-h"><h1 class="mono" style="font-size:24px">${esc(short(m))}</h1><p class="mono" style="font-size:12px">${esc(m)}</p></div><div id="cd" class="emptyrow">Loading…</div>`;
  const ps=await pools(),x=ps&&ps.find(p=>p.mintA===m),d=await data(),kc=d&&d.coins&&d.coins[m];
  if(!x){$('cd').textContent='This mint is not a coin on the HoldPad platform.';return}
+ {const mt=x.meta||{},lk=[['Raydium','https://raydium.io/launchpad/token/?mint='+m],['Solscan','https://solscan.io/token/'+m],['Website',safeUrl(mt.website)],['X',safeUrl(mt.twitter)],['Telegram',safeUrl(mt.telegram)]].filter(l=>l[1]);const h=document.querySelector('.page-h');if(h)h.innerHTML=`<h1 style="font-size:28px">${cImg(x,44)}${mt.name?esc(mt.name)+' <span class="mono" style="opacity:.6">$'+esc(mt.symbol)+'</span>':esc(short(m))}</h1><p class="mono" style="font-size:12px">${esc(m)}</p>${mt.description?`<p>${esc(mt.description)}</p>`:''}<p>${lk.map(l=>`<a href="${esc(l[1])}" target="_blank" rel="noopener">${l[0]}</a>`).join(' · ')}</p>`}
  const pr=x.raised/x.target;let hs=[];try{hs=await (await lib()).holders(CONFIG,m)}catch{}
  const lb=kc&&kc.leaderboard||[];
  $('cd').outerHTML=`<div class="cards">${card('PAIR',sym(x.mintB),x.mintB===CONFIG.PAIRS[0].m?'Holders paid in SOL':'Holders paid in '+sym(x.mintB))}${card('CURVE',f(pr*100,1)+'%',`${f(x.raised/10**x.decB)} / ${f(x.target/10**x.decB)} ${sym(x.mintB)}`)}${card('HOLDERS',hs.length?f(hs.length,0):'—','Accounts with a balance, on-chain')}${card('FEES ACCRUED',f(x.platformFee/10**x.decB,6)+' '+sym(x.mintB),'Unclaimed platform fees in the pool')}</div>
