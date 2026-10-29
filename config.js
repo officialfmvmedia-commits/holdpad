@@ -232,7 +232,7 @@ weight:(t,d)=>Math.max(0,t)*Math.max(0,d),
 LAUNCHLAB:'LanMV9sAd7wArD4vJFi2qDdfnVhFxYSUg6eADduJ3uj',
 PLATFORM_ADMIN:'HurAwDG4KCLb8Y38JWcXUcU6ZvHYoND7XntiomyvZAfv',
 PLATFORM_EXPECTED:'5Rp57pG59yQSbR2ZxQA9bVcH1Tr7QMk98aC9KDCsTWLN', // PDA from admin; becomes PLATFORM_ID once created
-WALLETS:{fee:'',buyHold:''}, // set once decided; empty = shown as 'not set'
+WALLETS:{fee:'BzLLvPcULF9TZxT2ZqfLmWtq9eoYYrKAUHSWMkHWNkNQ',buyHold:'BzLLvPcULF9TZxT2ZqfLmWtq9eoYYrKAUHSWMkHWNkNQ'}, // set once decided; empty = shown as 'not set'
 DATA_URL:'data/analytics.json', // written by keeper/keeper.mjs
 SCHEDULE:{snapshotEveryHours:24,payoutUtcHour:16}, // decision pending
 };
