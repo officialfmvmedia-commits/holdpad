@@ -1,4 +1,4 @@
-export const CONFIG={MINT:'9M4Ukvsh2LGjbxWsgmFBnykynuJpTUvP7sAAobbrFF6K',DEV:'HurAwDG4KCLb8Y38JWcXUcU6ZvHYoND7XntiomyvZAfv',
+export const CONFIG={MINT:'9M4Ukvsh2LGjbxWsgmFBnykynuJpTUvP7sAAobbrFF6K',
 RPC:['https://solana-rpc.publicnode.com','https://api.mainnet-beta.solana.com'],
 SPLIT:{holders:90,buyHold:10}, // % of HoldPad's fees (1.75% platform fee on curve trades + post-graduation LP fees)
 FEES:{raydium:0.25,platform:1.75,creator:0},
