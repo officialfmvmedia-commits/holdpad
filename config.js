@@ -7,7 +7,7 @@ SPLIT:[{k:'Holders',d:'by hold time',p:50,c:'#E8FF3A'},{k:'Buy $HOLD',d:'buyback
 PAIRS:[{"s": "SOL", "n": "Wrapped SOL", "m": "So11111111111111111111111111111111111111112", "config": "6s1xP3hpbAfFoNtUNF8mfHsjr2Bd97JxFJRWLbL6aHuX", "raise": 85, "t": "crypto", "i": "SOL.webp"},
 {"s": "USDC", "n": "USD Coin", "m": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v", "config": "8gj14w8vkNZjJTPak6e96Uf1sY438WKheH4s5dHyxiRw", "raise": 15000, "t": "crypto", "i": "USDC.webp"},
 {"s": "USDT", "n": "USDT", "m": "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB", "config": "97yPgo2FSXbC1uzimwezv3n4MKkzhTvGkzQ45uiZ4XDu", "raise": 15000, "t": "crypto", "i": "USDT.webp"},
-{"s": "SPCXx", "n": "SpaceX xStock", "m": "Xs3oZwbHvqis4NYcf4YKWmEia2eC84wSiVrcYcTqpH8", "config": "9mfQRzhyaACD49VhrSwCWKjrHVLcNfhxSdhg2hDSwCd8", "raise": 50, "t": "xstock", "i": "SPCXx.webp"},
+{"s": "SPCXx", "n": "SpaceX xStock", "m": "Xs3oZwbHvqis4NYcf4YKWmEia2eC84wSiVrcYcTqpH8", "config": "9mfQRzhyaACD49VhrSwCWKjrHVLcNfhxSdhg2hDSwCd8", "raise": 50, "t": "xstock", "i": ""},
 {"s": "TSLAx", "n": "Tesla xStock", "m": "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB", "config": "Fny7wPYnkeR5AU285YLSJv9giQUbxDA2DpXQAinTe2nR", "raise": 35, "t": "xstock", "i": "TSLAx.webp"},
 {"s": "NVDAx", "n": "NVIDIA xStock", "m": "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh", "config": "2NuVPU5ViAyQsZamVfJ1vU6Cp77WSzret4LtNTMiWFQ4", "raise": 80, "t": "xstock", "i": "NVDAx.webp"},
 {"s": "AAPLx", "n": "Apple xStock", "m": "XsbEhLAtcf6HdfpFZ5xEMdqW8nfAvcsP5bdudRLJzJp", "config": "9RkoV181ksAPNnZmGMyici4MgswhewW2hqvhkVd4DoHi", "raise": 58, "t": "xstock", "i": ""},
